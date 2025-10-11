@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/elazarl/goproxy"
+	_ "github.com/lib/pq"
 )
 
 func main() {
