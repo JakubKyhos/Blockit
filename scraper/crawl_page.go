@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func crawlPage(rawCurrentURL string) (PageData, error) {
+func CrawlPage(rawCurrentURL string) (PageData, error) {
 	fmt.Printf("crawling %s\n", rawCurrentURL)
 
 	htmlBody, err := getHTML(rawCurrentURL)

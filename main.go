@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	scraper "github.com/JakubKyhos/Blockit.git/domainScraper"
+	"github.com/JakubKyhos/Blockit.git/scraper"
 	"github.com/elazarl/goproxy"
 	_ "github.com/lib/pq"
 )
