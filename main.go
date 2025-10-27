@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	scraper "github.com/JakubKyhos/Blockit.git/domainScraper"
 	"github.com/elazarl/goproxy"
 	_ "github.com/lib/pq"
 )
@@ -31,6 +32,8 @@ func main() {
 			return r, nil
 		},
 	)
+
+	HTMLdata, err := scraper.CrawlPage("https://data.iana.org/TLD/tlds-alpha-by-domain.txt")
 
 	log.Println("Proxy listening on :8080")
 	log.Fatal(http.ListenAndServe(":8080", proxy))
