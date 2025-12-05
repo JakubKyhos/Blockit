@@ -4,21 +4,17 @@ import (
 	"fmt"
 )
 
-func CrawlPage(rawCurrentURL string) (PageData, error) {
+func CrawlPage(rawCurrentURL string) (string, error) {
 	fmt.Printf("crawling %s\n", rawCurrentURL)
 
 	htmlBody, err := getHTML(rawCurrentURL)
 	if err != nil {
 		fmt.Printf("Error - getHTML: %v", err)
-		return PageData{
-			URL:            rawCurrentURL,
-			H1:             "",
-			FirstParagraph: "",
-		}, err
+		return "", err
 	}
 
 	// Extract all the data we care about and store it
-	pageData := extractPageData(htmlBody, rawCurrentURL)
+	topLevelDomains := getFirstParagraphFromHTML(htmlBody)
 
-	return pageData, nil
+	return topLevelDomains, nil
 }
