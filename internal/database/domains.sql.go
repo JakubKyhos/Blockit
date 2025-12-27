@@ -60,6 +60,68 @@ func (q *Queries) DeleteDomains(ctx context.Context) error {
 	return err
 }
 
+const domainBlockState = `-- name: DomainBlockState :one
+UPDATE domains
+SET is_blocked = $1,
+updated_at = NOW()
+WHERE name = $2
+RETURNING id, created_at, updated_at, name, is_blocked
+`
+
+type DomainBlockStateParams struct {
+	IsBlocked bool
+	Name      string
+}
+
+func (q *Queries) DomainBlockState(ctx context.Context, arg DomainBlockStateParams) (Domain, error) {
+	row := q.db.QueryRowContext(ctx, domainBlockState, arg.IsBlocked, arg.Name)
+	var i Domain
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Name,
+		&i.IsBlocked,
+	)
+	return i, err
+}
+
+const domainsBlockedStateGlobal = `-- name: DomainsBlockedStateGlobal :many
+UPDATE domains
+SET is_blocked = $1,
+updated_at = NOW()
+RETURNING id, created_at, updated_at, name, is_blocked
+`
+
+func (q *Queries) DomainsBlockedStateGlobal(ctx context.Context, isBlocked bool) ([]Domain, error) {
+	rows, err := q.db.QueryContext(ctx, domainsBlockedStateGlobal, isBlocked)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Domain
+	for rows.Next() {
+		var i Domain
+		if err := rows.Scan(
+			&i.ID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Name,
+			&i.IsBlocked,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getDomain = `-- name: GetDomain :one
 SELECT id, created_at, updated_at, name, is_blocked FROM domains WHERE name = $1
 `
