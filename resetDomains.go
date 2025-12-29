@@ -13,6 +13,6 @@ func resetDomains(db *database.Queries) error {
 		return fmt.Errorf("couldn't delete users: %w", err)
 	}
 
-	fmt.Println("Database reset successfully!")
+	fmt.Println("Database reset was successfull!")
 	return nil
 }

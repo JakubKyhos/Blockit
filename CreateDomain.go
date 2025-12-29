@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/JakubKyhos/Blockit.git/internal/database"
@@ -11,12 +12,12 @@ import (
 	"github.com/lib/pq"
 )
 
-func CreateDomain(db *database.Queries, name string) error {
+func SetupDomain(db *database.Queries, name string) error {
 	var new_domain = database.CreateDomainParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
-		Name:      name,
+		Name:      strings.ToLower(name),
 	}
 
 	user, err := db.CreateDomain(context.Background(), new_domain)
@@ -36,6 +37,9 @@ func CreateDomain(db *database.Queries, name string) error {
 }
 
 func printDomain(domain database.Domain) {
-	fmt.Printf(" * ID:      %v\n", domain.ID)
-	fmt.Printf(" * Name:    %v\n", domain.Name)
+	fmt.Printf(" * ID:      	 %v\n", domain.ID)
+	fmt.Printf(" * CreatedAt 	 %s\n", domain.CreatedAt)
+	fmt.Printf(" * UpdatedAt 	 %s\n", domain.UpdatedAt)
+	fmt.Printf(" * Name:    	 %s\n", domain.Name)
+	fmt.Printf(" * IsBlocked:    %t\n", domain.IsBlocked)
 }
