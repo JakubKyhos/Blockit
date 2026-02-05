@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 	"github.com/google/uuid"
@@ -14,10 +13,8 @@ import (
 
 func SetupDomain(db *database.Queries, name string) error {
 	var new_domain = database.CreateDomainParams{
-		ID:        uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
-		Name:      strings.ToLower(name),
+		ID:   uuid.New(),
+		Name: strings.ToLower(name),
 	}
 
 	user, err := db.CreateDomain(context.Background(), new_domain)

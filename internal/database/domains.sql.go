@@ -7,39 +7,26 @@ package database
 
 import (
 	"context"
-	"time"
 
 	"github.com/google/uuid"
 )
 
 const createDomain = `-- name: CreateDomain :one
-INSERT INTO domains (id, created_at, updated_at, name, is_blocked)
+INSERT INTO domains (id, name)
 VALUES (
     $1,
-    $2,
-    $3,
-    $4,
-    $5
+    $2
 )
 RETURNING id, created_at, updated_at, name, is_blocked
 `
 
 type CreateDomainParams struct {
-	ID        uuid.UUID
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	Name      string
-	IsBlocked bool
+	ID   uuid.UUID
+	Name string
 }
 
 func (q *Queries) CreateDomain(ctx context.Context, arg CreateDomainParams) (Domain, error) {
-	row := q.db.QueryRowContext(ctx, createDomain,
-		arg.ID,
-		arg.CreatedAt,
-		arg.UpdatedAt,
-		arg.Name,
-		arg.IsBlocked,
-	)
+	row := q.db.QueryRowContext(ctx, createDomain, arg.ID, arg.Name)
 	var i Domain
 	err := row.Scan(
 		&i.ID,

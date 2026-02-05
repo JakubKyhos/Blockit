@@ -1,3 +1,4 @@
-goproxy
+goproxy/ca.pem
+goproxy/key.pem
 .env
 BlockIt

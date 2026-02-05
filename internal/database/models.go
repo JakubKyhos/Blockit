@@ -5,6 +5,7 @@
 package database
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,4 +17,11 @@ type Domain struct {
 	UpdatedAt time.Time
 	Name      string
 	IsBlocked bool
+}
+
+type Whitelist struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	ExpiresAt sql.NullTime
+	Name      string
 }
