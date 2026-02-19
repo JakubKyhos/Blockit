@@ -18,22 +18,3 @@ func getInput() []string {
 	line = strings.TrimSpace(line)
 	return strings.Fields(line)
 }
-
-func parseTLDList(text string) []string {
-	// Split into lines
-	raw := strings.Split(text, "\n")
-
-	var tlds []string
-	for _, line := range raw {
-		line = strings.TrimSpace(line)
-		if line == "" {
-			continue // skip empty lines
-		}
-		if strings.HasPrefix(line, "#") {
-			continue // skip comment header lines from IANA
-		}
-		tlds = append(tlds, line)
-	}
-
-	return tlds
-}

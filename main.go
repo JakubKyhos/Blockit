@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/JakubKyhos/Blockit.git/TLDs"
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 	"github.com/joho/godotenv"
 )
@@ -34,7 +35,7 @@ func main() {
 		}
 		switch words[0] {
 		case "setup":
-			err = setup(dbQueries, webPage)
+			err = TLDs.Setup(dbQueries, webPage)
 			if err != nil {
 				fmt.Printf("failed to set up DB: %v", err)
 				continue
@@ -43,7 +44,7 @@ func main() {
 			fmt.Println("DB has been set up successfully")
 			fmt.Println("-------------------------")
 		case "list":
-			dblist, err := listDomains(dbQueries)
+			dblist, err := TLDs.ListDomains(dbQueries)
 			if err != nil {
 				fmt.Printf("failed to list DB: %v\n", err)
 				continue
@@ -55,11 +56,11 @@ func main() {
 			fmt.Printf("%v\n", dblist)
 			for _, domain := range dblist {
 				fmt.Println("-------------------------")
-				printDomain(domain)
+				TLDs.PrintDomain(domain)
 				fmt.Println("-------------------------")
 			}
 		case "reset":
-			err = resetDomains(dbQueries)
+			err = TLDs.ResetDomains(dbQueries)
 			if err != nil {
 				fmt.Printf("failed to reset DB: %v", err)
 				continue
@@ -69,7 +70,7 @@ func main() {
 				fmt.Println("blockstate needs 3 arguments: blockstate true/false domainName/global")
 				continue
 			}
-			err := blockStatewrapper(dbQueries, words[1], words[2])
+			err := TLDs.BlockStatewrapper(dbQueries, words[1], words[2])
 			if err != nil {
 				fmt.Printf("there was an issue with block state cmd: %v\n", err)
 				continue

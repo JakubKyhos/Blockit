@@ -1,4 +1,4 @@
-package main
+package TLDs
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 )
 
-func listDomains(db *database.Queries) ([]database.Domain, error) {
+func ListDomains(db *database.Queries) ([]database.Domain, error) {
 	domains, err := db.GetDomains(context.Background())
 	if err != nil {
 		return nil, fmt.Errorf("failed to list domains: %v", err)

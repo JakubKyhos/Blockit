@@ -1,4 +1,4 @@
-package main
+package TLDs
 
 import (
 	"context"
@@ -7,12 +7,12 @@ import (
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 )
 
-func resetDomains(db *database.Queries) error {
+func ResetDomains(db *database.Queries) error {
 	err := db.DeleteDomains(context.Background())
 	if err != nil {
-		return fmt.Errorf("couldn't delete users: %w", err)
+		return fmt.Errorf("couldn't delete TLDs: %w", err)
 	}
 
-	fmt.Println("Database reset was successfull!")
+	fmt.Println("TLD database reset was successfull!")
 	return nil
 }

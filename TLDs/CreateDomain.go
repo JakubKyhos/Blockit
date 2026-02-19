@@ -1,4 +1,4 @@
-package main
+package TLDs
 
 import (
 	"context"
@@ -17,7 +17,7 @@ func SetupDomain(db *database.Queries, name string) error {
 		Name: strings.ToLower(name),
 	}
 
-	user, err := db.CreateDomain(context.Background(), new_domain)
+	domain, err := db.CreateDomain(context.Background(), new_domain)
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			if pqErr.Code == "23505" {
@@ -28,12 +28,12 @@ func SetupDomain(db *database.Queries, name string) error {
 		return err
 	}
 
-	fmt.Printf("user: %s was created\n", name)
-	printDomain(user)
+	fmt.Printf("domain: %s was created\n", name)
+	PrintDomain(domain)
 	return nil
 }
 
-func printDomain(domain database.Domain) {
+func PrintDomain(domain database.Domain) {
 	fmt.Printf(" * ID:      	 %v\n", domain.ID)
 	fmt.Printf(" * CreatedAt 	 %s\n", domain.CreatedAt)
 	fmt.Printf(" * UpdatedAt 	 %s\n", domain.UpdatedAt)
