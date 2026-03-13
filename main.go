@@ -57,7 +57,7 @@ func main() {
 					continue
 				}
 				fmt.Println("-------------------------")
-				fmt.Printf("%v has been added to whitelist successfully", words[2])
+				fmt.Printf("%v has been added to whitelist successfully\n", words[2])
 				fmt.Println("-------------------------")
 			case "whitelisttemp":
 				err = whitelist.CreateWhitelistTemp(dbQueries, words[2])
@@ -66,7 +66,7 @@ func main() {
 					continue
 				}
 				fmt.Println("-------------------------")
-				fmt.Printf("%v has been added temporarily to whitelist", words[2])
+				fmt.Printf("%v has been added temporarily to whitelist\n", words[2])
 				fmt.Println("-------------------------")
 			default:
 				fmt.Println("Unknown argument. Use whitelist or whitelisttemp.")
@@ -110,7 +110,6 @@ func main() {
 					fmt.Println("whitelist is empty use 'add whitelist webpage' to populate whitelist")
 					continue
 				}
-				fmt.Printf("%v\n", dblist)
 				for _, okweb := range dblist {
 					fmt.Println("-------------------------")
 					whitelist.PrintWhitelist(okweb)

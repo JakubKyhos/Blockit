@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/JakubKyhos/Blockit.git/internal/database"
@@ -15,7 +16,7 @@ import (
 func CreateWhitelist(db *database.Queries, name string) error {
 	var new_whitelist = database.CreateWhitelistDomParams{
 		ID:   uuid.New(),
-		Name: name,
+		Name: strings.ToLower(name),
 	}
 
 	whitelist, err := db.CreateWhitelistDom(context.Background(), new_whitelist)
@@ -45,7 +46,7 @@ func CreateWhitelistTemp(db *database.Queries, name string) error {
 	var new_whitelistTemp = database.CreateWhitelistDomTempParams{
 		ID:        uuid.New(),
 		ExpiresAt: nullTime,
-		Name:      name,
+		Name:      strings.ToLower(name),
 	}
 
 	whitelist, err := db.CreateWhitelistDomTemp(context.Background(), new_whitelistTemp)
