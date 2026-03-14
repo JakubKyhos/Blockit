@@ -13,15 +13,15 @@ func ListWhitelist(db *database.Queries) ([]database.Whitelist, error) {
 		return nil, fmt.Errorf("failed to list domains: %v", err)
 	}
 
-	var webPageList []database.Whitelist
+	var domainList []database.Whitelist
 	for i := 0; i < len(whitelist); i++ {
-		page := database.Whitelist{
+		domain := database.Whitelist{
 			ID:        whitelist[i].ID,
 			CreatedAt: whitelist[i].CreatedAt,
 			ExpiresAt: whitelist[i].ExpiresAt,
 			Name:      whitelist[i].Name,
 		}
-		webPageList = append(webPageList, page)
+		domainList = append(domainList, domain)
 	}
-	return webPageList, nil
+	return domainList, nil
 }

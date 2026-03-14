@@ -11,6 +11,12 @@ import (
 	"github.com/google/uuid"
 )
 
+type Blacklist struct {
+	ID        uuid.UUID
+	CreatedAt time.Time
+	Name      string
+}
+
 type Domain struct {
 	ID        uuid.UUID
 	CreatedAt time.Time

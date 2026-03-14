@@ -23,7 +23,7 @@ func CreateWhitelist(db *database.Queries, name string) error {
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			if pqErr.Code == "23505" {
-				fmt.Printf("domain %s is already whitelisted\n", name)
+				fmt.Printf("domain %s already exists in database\n", name)
 				os.Exit(1)
 			}
 		}
@@ -37,7 +37,7 @@ func CreateWhitelist(db *database.Queries, name string) error {
 
 func CreateWhitelistTemp(db *database.Queries, name string) error {
 	currentTime := time.Now().Local()
-	duration := currentTime.Add(time.Minute * 1)
+	duration := currentTime.Add(time.Hour * 1)
 	nullTime := sql.NullTime{
 		Time:  duration,
 		Valid: true,
@@ -53,7 +53,7 @@ func CreateWhitelistTemp(db *database.Queries, name string) error {
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
 			if pqErr.Code == "23505" {
-				fmt.Printf("tempDomain %s already exists\n", name)
+				fmt.Printf("tempDomain %s already exists in database\n", name)
 				os.Exit(1)
 			}
 		}
