@@ -14,7 +14,7 @@ import (
 func CreateBlacklist(db *database.Queries, name string) error {
 	var new_blacklist = database.CreateBlacklistDomParams{
 		ID:   uuid.New(),
-		Name: strings.ToLower(name),
+		Name: strings.ToLower(strings.TrimSpace(name)),
 	}
 
 	blacklist, err := db.CreateBlacklistDom(context.Background(), new_blacklist)
@@ -28,13 +28,16 @@ func CreateBlacklist(db *database.Queries, name string) error {
 		return err
 	}
 
-	fmt.Printf("domain: %s was blacklisted\n", name)
+	fmt.Println("-------------------------")
 	PrintBlacklist(blacklist)
+
 	return nil
 }
 
 func PrintBlacklist(blacklist database.Blacklist) {
+	fmt.Printf(" * %v has been added to blacklist successfully\n", blacklist.Name)
 	fmt.Printf(" * ID:      	 %v\n", blacklist.ID)
 	fmt.Printf(" * CreatedAt 	 %s\n", blacklist.CreatedAt)
 	fmt.Printf(" * Name:    	 %s\n", blacklist.Name)
+	fmt.Println("-------------------------")
 }

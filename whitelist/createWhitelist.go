@@ -16,7 +16,7 @@ import (
 func CreateWhitelist(db *database.Queries, name string) error {
 	var new_whitelist = database.CreateWhitelistDomParams{
 		ID:   uuid.New(),
-		Name: strings.ToLower(name),
+		Name: strings.ToLower(strings.TrimSpace(name)),
 	}
 
 	whitelist, err := db.CreateWhitelistDom(context.Background(), new_whitelist)
@@ -30,8 +30,8 @@ func CreateWhitelist(db *database.Queries, name string) error {
 		return err
 	}
 
-	fmt.Printf("domain: %s was whitelisted\n", name)
 	PrintWhitelist(whitelist)
+
 	return nil
 }
 
@@ -60,14 +60,17 @@ func CreateWhitelistTemp(db *database.Queries, name string) error {
 		return err
 	}
 
-	fmt.Printf("tempDom: %s was created\n", name)
+	fmt.Println("-------------------------")
 	PrintWhitelist(whitelist)
+
 	return nil
 }
 
 func PrintWhitelist(whitelist database.Whitelist) {
+	fmt.Printf(" * %v has been added to whitelist successfully\n", whitelist.Name)
 	fmt.Printf(" * ID:      	 %v\n", whitelist.ID)
 	fmt.Printf(" * CreatedAt 	 %s\n", whitelist.CreatedAt)
 	fmt.Printf(" * ExpiresAt 	 %s\n", whitelist.ExpiresAt.Time)
 	fmt.Printf(" * Name:    	 %s\n", whitelist.Name)
+	fmt.Println("-------------------------")
 }

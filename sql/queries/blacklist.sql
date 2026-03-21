@@ -7,7 +7,7 @@ VALUES (
 RETURNING *;
 
 -- name: GetBlacklistDom :one
-SELECT * FROM whitelist WHERE name = $1;
+SELECT * FROM blacklist WHERE name = $1;
 
 -- name: DeleteBlacklistDoms :exec
 DELETE FROM blacklist;

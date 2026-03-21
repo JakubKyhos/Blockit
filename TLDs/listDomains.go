@@ -7,22 +7,20 @@ import (
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 )
 
-func ListDomains(db *database.Queries) ([]database.Domain, error) {
+func ListDomains(db *database.Queries) error {
 	domains, err := db.GetDomains(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("failed to list domains: %v", err)
+		return fmt.Errorf("failed to list tld's from DB: %v", err)
 	}
 
-	var domainList []database.Domain
-	for i := 0; i < len(domains); i++ {
-		domain := database.Domain{
-			ID:        domains[i].ID,
-			CreatedAt: domains[i].CreatedAt,
-			UpdatedAt: domains[i].UpdatedAt,
-			Name:      domains[i].Name,
-			IsBlocked: domains[i].IsBlocked,
-		}
-		domainList = append(domainList, domain)
+	if len(domains) == 0 {
+		return fmt.Errorf("tld's DB is empty, use 'setup' to populate it")
 	}
-	return domainList, nil
+
+	fmt.Println("-------------------------")
+	for _, domain := range domains {
+		PrintDomain(domain)
+	}
+
+	return nil
 }

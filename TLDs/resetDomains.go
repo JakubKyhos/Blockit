@@ -13,6 +13,9 @@ func ResetDomains(db *database.Queries) error {
 		return fmt.Errorf("couldn't delete TLDs: %w", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("TLD database reset was successfull!")
+	fmt.Println("-------------------------")
+
 	return nil
 }

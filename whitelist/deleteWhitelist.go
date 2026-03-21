@@ -13,7 +13,10 @@ func ResetWhitelist(db *database.Queries) error {
 		return fmt.Errorf("couldn't reset whitelist: %w", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("Whitelist reset was successfull!")
+	fmt.Println("-------------------------")
+
 	return nil
 }
 
@@ -23,7 +26,10 @@ func DeleteWhitelistTempDom(db *database.Queries) error {
 		return fmt.Errorf("couldn't delete temp whitelisted domains: %w", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("Deletion of temp domains was successfull!")
+	fmt.Println("-------------------------")
+
 	return nil
 }
 
@@ -33,6 +39,9 @@ func DeleteWhitelistDom(db *database.Queries, name string) error {
 		return fmt.Errorf("couldn't delete whitelisted domain: %w", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("Deletion of whitelisted domain was successfull!")
+	fmt.Println("-------------------------")
+
 	return nil
 }

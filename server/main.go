@@ -50,31 +50,52 @@ func main() {
 
 	proxy.OnRequest().DoFunc(
 		func(r *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-			host := strings.ToLower(r.URL.Hostname()) // strips port
-			slice := strings.Split(host, ".")
-			tld := slice[len(slice)-1]
-			web, _ := strings.CutPrefix(host, "www.")
+			host := strings.ToLower(r.URL.Hostname())
 
-			_, err := dbQueries.GetWhitelistDom(context.Background(), web)
-			if err != nil {
-				log.Printf("Couldn't find %s in whitelist: %v", web, err)
-			} else {
+			if host == "" {
 				return r, nil
 			}
 
-			domain, err := dbQueries.GetDomain(context.Background(), tld)
-			if err != nil {
-				log.Printf("Blocked request to webpage: %s\n %v", host, err)
-				return r, goproxy.NewResponse(r,
-					goproxy.ContentTypeText, http.StatusForbidden,
-					fmt.Sprintf("Access to webpage %s is blocked. Domain is either malformed or isn't present in database. Try updating DB and loading the webpage again.", host))
-			} else if domain.IsBlocked == true {
-				log.Printf("Blocked request to domain: %s", domain.Name)
-				return r, goproxy.NewResponse(r,
-					goproxy.ContentTypeText, http.StatusForbidden,
-					fmt.Sprintf("Access to domain %s is blocked.", domain.Name))
+			// Extract TLD safely
+			parts := strings.Split(host, ".")
+			tld := parts[len(parts)-1]
+
+			// Strip www
+			web, _ := strings.CutPrefix(host, "www.")
+			web = strings.TrimSpace(web)
+
+			fmt.Printf("host: %s\n", host)
+			fmt.Printf("web: %s\n", web)
+
+			// 1. Whitelist → allow immediately
+			if allowed, err := dbQueries.GetWhitelistDom(context.Background(), web); err == nil {
+				log.Printf("Access granted to domain: %s", allowed.Name)
+				return r, nil
 			}
 
+			// 2. Blacklist → block immediately
+			if blocked, err := dbQueries.GetBlacklistDom(context.Background(), web); err == nil {
+				log.Printf("Blocked request (blacklist): %s", blocked.Name)
+				return r, goproxy.NewResponse(
+					r,
+					goproxy.ContentTypeText,
+					http.StatusForbidden,
+					fmt.Sprintf("Domain %s is blacklisted.", blocked.Name),
+				)
+			}
+
+			// 3. TLD block → block
+			if domain, err := dbQueries.GetDomain(context.Background(), tld); err == nil && domain.IsBlocked {
+				log.Printf("Blocked request (TLD): %s", domain.Name)
+				return r, goproxy.NewResponse(
+					r,
+					goproxy.ContentTypeText,
+					http.StatusForbidden,
+					fmt.Sprintf("Access to TLD %s is blocked.", domain.Name),
+				)
+			}
+
+			// 4. Default → allow
 			return r, nil
 		},
 	)

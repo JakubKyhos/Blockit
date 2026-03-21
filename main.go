@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/JakubKyhos/Blockit.git/TLDs"
+	"github.com/JakubKyhos/Blockit.git/blacklist"
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 	"github.com/JakubKyhos/Blockit.git/whitelist"
 	"github.com/joho/godotenv"
@@ -53,23 +54,23 @@ func main() {
 			case "whitelist":
 				err = whitelist.CreateWhitelist(dbQueries, words[2])
 				if err != nil {
-					fmt.Printf("failed to add %v to DB: %v", words[2], err)
+					fmt.Printf("failed to add %v to whitelist DB: %v", words[2], err)
 					continue
 				}
-				fmt.Println("-------------------------")
-				fmt.Printf("%v has been added to whitelist successfully\n", words[2])
-				fmt.Println("-------------------------")
 			case "whitelisttemp":
 				err = whitelist.CreateWhitelistTemp(dbQueries, words[2])
 				if err != nil {
-					fmt.Printf("failed to add %v to DB: %v", words[2], err)
+					fmt.Printf("failed to add %v to whitelist DB: %v", words[2], err)
 					continue
 				}
-				fmt.Println("-------------------------")
-				fmt.Printf("%v has been added temporarily to whitelist\n", words[2])
-				fmt.Println("-------------------------")
+			case "blacklist":
+				err = blacklist.CreateBlacklist(dbQueries, words[2])
+				if err != nil {
+					fmt.Printf("failed to add %v to blacklist DB: %v", words[2], err)
+					continue
+				}
 			default:
-				fmt.Println("Unknown argument. Use whitelist or whitelisttemp.")
+				fmt.Println("Unknown second argument. Use whitelist, whitelisttemp or blacklist.")
 			}
 		case "delete":
 			if len(words) != 3 {
@@ -91,8 +92,14 @@ func main() {
 						continue
 					}
 				}
+			case "blacklist":
+				err = blacklist.DeleteBlacklistDom(dbQueries, words[2])
+				if err != nil {
+					fmt.Printf("failed to delete domain %v from blacklist: %v", words[2], err)
+					continue
+				}
 			default:
-				fmt.Println("Unknown argument. Use whitelist.")
+				fmt.Println("Unknown second argument. Use whitelist or blacklist.")
 			}
 		case "list":
 			if len(words) != 2 {
@@ -101,38 +108,25 @@ func main() {
 			}
 			switch words[1] {
 			case "whitelist":
-				dblist, err := whitelist.ListWhitelist(dbQueries)
+				err = whitelist.ListWhitelist(dbQueries)
 				if err != nil {
 					fmt.Printf("failed to list whitelist from DB: %v\n", err)
 					continue
 				}
-				if len(dblist) == 0 {
-					fmt.Println("whitelist is empty use 'add whitelist webpage' to populate whitelist")
+			case "blacklist":
+				err = blacklist.ListBlacklist(dbQueries)
+				if err != nil {
+					fmt.Printf("failed to list blacklist from DB: %v\n", err)
 					continue
 				}
-				for _, okweb := range dblist {
-					fmt.Println("-------------------------")
-					whitelist.PrintWhitelist(okweb)
-					fmt.Println("-------------------------")
-				}
 			case "tld":
-				dblist, err := TLDs.ListDomains(dbQueries)
+				err = TLDs.ListDomains(dbQueries)
 				if err != nil {
 					fmt.Printf("failed to list tld's from DB: %v\n", err)
 					continue
 				}
-				if len(dblist) == 0 {
-					fmt.Println("tld's DB is empty, use 'setup' to populate it")
-					continue
-				}
-				fmt.Printf("%v\n", dblist)
-				for _, domain := range dblist {
-					fmt.Println("-------------------------")
-					TLDs.PrintDomain(domain)
-					fmt.Println("-------------------------")
-				}
 			default:
-				fmt.Println("Unknown argument. Use tld or whitelist.")
+				fmt.Println("Unknown second argument. Use tld, whitelist or blacklist.")
 			}
 
 		case "reset":
@@ -143,17 +137,23 @@ func main() {
 			case "tld":
 				err = TLDs.ResetDomains(dbQueries)
 				if err != nil {
-					fmt.Printf("failed to reset DB: %v", err)
+					fmt.Printf("failed to reset TLD DB: %v", err)
 					continue
 				}
 			case "whitelist":
 				err = whitelist.ResetWhitelist(dbQueries)
 				if err != nil {
-					fmt.Printf("failed to reset DB: %v", err)
+					fmt.Printf("failed to reset whitelist DB: %v", err)
+					continue
+				}
+			case "blacklist":
+				err = blacklist.ResetBlacklist(dbQueries)
+				if err != nil {
+					fmt.Printf("failed to reset blacklist DB: %v", err)
 					continue
 				}
 			default:
-				fmt.Println("Unknown argument. Use tld or whitelist.")
+				fmt.Println("Unknown second argument. Use tld, whitelist or blacklist.")
 			}
 
 		case "blockstate":
@@ -168,10 +168,14 @@ func main() {
 			}
 
 		case "quit":
+			fmt.Println("-------------------------")
 			fmt.Println("quiting BlockIt settings")
+			fmt.Println("-------------------------")
 			return
 		default:
+			fmt.Println("-------------------------")
 			fmt.Println("unknown command")
+			fmt.Println("-------------------------")
 		}
 	}
 }

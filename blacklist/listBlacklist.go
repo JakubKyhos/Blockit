@@ -7,20 +7,20 @@ import (
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 )
 
-func ListBlacklist(db *database.Queries) ([]database.Blacklist, error) {
+func ListBlacklist(db *database.Queries) error {
 	blacklist, err := db.GetBlacklistDoms(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("failed to list domains: %v", err)
+		return fmt.Errorf("failed to list domains: %v", err)
 	}
 
-	var domainList []database.Blacklist
-	for i := 0; i < len(blacklist); i++ {
-		domain := database.Blacklist{
-			ID:        blacklist[i].ID,
-			CreatedAt: blacklist[i].CreatedAt,
-			Name:      blacklist[i].Name,
-		}
-		domainList = append(domainList, domain)
+	if len(blacklist) == 0 {
+		return fmt.Errorf("blacklist is empty use 'add blacklist webpage' to populate blacklist")
 	}
-	return domainList, nil
+
+	fmt.Println("-------------------------")
+	for _, blocked := range blacklist {
+		PrintBlacklist(blocked)
+	}
+
+	return nil
 }

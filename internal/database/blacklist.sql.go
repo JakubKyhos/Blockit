@@ -51,18 +51,13 @@ func (q *Queries) DeleteBlacklistDoms(ctx context.Context) error {
 }
 
 const getBlacklistDom = `-- name: GetBlacklistDom :one
-SELECT id, created_at, expires_at, name FROM whitelist WHERE name = $1
+SELECT id, created_at, name FROM blacklist WHERE name = $1
 `
 
-func (q *Queries) GetBlacklistDom(ctx context.Context, name string) (Whitelist, error) {
+func (q *Queries) GetBlacklistDom(ctx context.Context, name string) (Blacklist, error) {
 	row := q.db.QueryRowContext(ctx, getBlacklistDom, name)
-	var i Whitelist
-	err := row.Scan(
-		&i.ID,
-		&i.CreatedAt,
-		&i.ExpiresAt,
-		&i.Name,
-	)
+	var i Blacklist
+	err := row.Scan(&i.ID, &i.CreatedAt, &i.Name)
 	return i, err
 }
 

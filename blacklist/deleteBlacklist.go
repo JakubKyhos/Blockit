@@ -13,7 +13,10 @@ func ResetBlacklist(db *database.Queries) error {
 		return fmt.Errorf("couldn't reset blacklist: %w", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("Blacklist reset was successfull!")
+	fmt.Println("-------------------------")
+
 	return nil
 }
 
@@ -23,6 +26,9 @@ func DeleteBlacklistDom(db *database.Queries, name string) error {
 		return fmt.Errorf("couldn't delete blacklisted domain: %w", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("Deletion of blacklisted domain was successfull!")
+	fmt.Println("-------------------------")
+
 	return nil
 }

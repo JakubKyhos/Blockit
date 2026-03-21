@@ -15,6 +15,7 @@ func ChangeBlockedState(db *database.Queries, args database.DomainBlockStatePara
 		return database.Domain{}, fmt.Errorf("failed to update %s's blocked state: %v", args.Name, err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("blocked state was changed sucessfully")
 	return domain, nil
 }
@@ -25,6 +26,7 @@ func ChangeBlockedStateGlobal(db *database.Queries, isBlocked bool) ([]database.
 		return nil, fmt.Errorf("failed to update blocked state globaly: %v", err)
 	}
 
+	fmt.Println("-------------------------")
 	fmt.Println("global blocked state was changed successfully")
 	return domains, nil
 }
@@ -44,8 +46,8 @@ func BlockStatewrapper(db *database.Queries, boolean string, subject string) err
 		if err != nil {
 			return fmt.Errorf("failed to change blockstate globaly: %v", err)
 		}
+		fmt.Println("-------------------------")
 		for _, domain := range datBase {
-			fmt.Println("-------------------------")
 			PrintDomain(domain)
 			fmt.Println("-------------------------")
 		}

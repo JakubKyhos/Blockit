@@ -7,21 +7,20 @@ import (
 	"github.com/JakubKyhos/Blockit.git/internal/database"
 )
 
-func ListWhitelist(db *database.Queries) ([]database.Whitelist, error) {
+func ListWhitelist(db *database.Queries) error {
 	whitelist, err := db.GetWhitelistDoms(context.Background())
 	if err != nil {
-		return nil, fmt.Errorf("failed to list domains: %v", err)
+		return fmt.Errorf("failed to list domains: %v", err)
 	}
 
-	var domainList []database.Whitelist
-	for i := 0; i < len(whitelist); i++ {
-		domain := database.Whitelist{
-			ID:        whitelist[i].ID,
-			CreatedAt: whitelist[i].CreatedAt,
-			ExpiresAt: whitelist[i].ExpiresAt,
-			Name:      whitelist[i].Name,
-		}
-		domainList = append(domainList, domain)
+	if len(whitelist) == 0 {
+		return fmt.Errorf("whitelist is empty use 'add whitelist webpage' to populate whitelist")
 	}
-	return domainList, nil
+
+	fmt.Println("-------------------------")
+	for _, okweb := range whitelist {
+		PrintWhitelist(okweb)
+	}
+
+	return nil
 }
