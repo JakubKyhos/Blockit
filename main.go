@@ -36,6 +36,8 @@ func main() {
 			continue
 		}
 		switch words[0] {
+		case "help":
+			help()
 		case "setup":
 			err = TLDs.Setup(dbQueries, webPage)
 			if err != nil {
@@ -158,7 +160,7 @@ func main() {
 
 		case "blockstate":
 			if len(words) != 3 {
-				fmt.Println("blockstate needs 3 arguments: blockstate true/false domainName/global")
+				fmt.Println("blockstate needs 3 arguments: blockstate true/false tld/global")
 				continue
 			}
 			err := TLDs.BlockStatewrapper(dbQueries, words[1], words[2])
