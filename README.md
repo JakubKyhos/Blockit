@@ -45,16 +45,16 @@ A command-line tool for managing domain whitelists and blacklists based on TLD d
 
 7. Setup proxy server in OS settings:
  - **Windows:** settings -> network and internet -> proxy server
- - **MacOS:** settings -> network -> click on desired network and details -> proxy (I don't own MacOS so this is untested)
- - for both: manual setting -> use proxy server: *enabled*, IP adress: `http://localhost`, port: `8080` -> *save*
+ - **MacOS:** settings -> network -> click on desired network and details -> proxy
+ - for both: manual setting -> use proxy server: *enabled*, IP address: `http://localhost`, port: `8080` -> *save*
    - **if you are not using BlockIt, make sure to disable the proxy server**
 
 ## Usage
 
-Run `./main.go` to configure the application:
+Run `go run .` to configure the application:
 - The application provides an interactive command-line interface. Enter commands to manage domains.
 
-Run `./server/main.go` to start the proxy server:
+Run `go run ./server/main.go` to start the proxy server:
 
 ### Available Commands
 
