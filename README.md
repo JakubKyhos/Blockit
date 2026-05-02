@@ -1,8 +1,19 @@
 # BlockIt
 
-A command-line tool for managing domain whitelists and blacklists based on TLD data from IANA.
+A command-line tool for managing domain whitelists and blacklists based on TLD data from IANA utilizing elazarl's goproxy library.
 
-## Installation
+## Motivation
+- About 3.4 billion phishing emails are sent daily.
+- Over 90% of all cyberattacks begin with a phishing email.
+- 94% of malware is delivered via email.
+
+- How many of us suffer from gambling social media or adult content addiction.
+
+- This project seeks to solve these problems by allowing you to block domains based on just the TLD or the whole domain name.
+
+
+
+## Quick Start
 
 1. Clone the repository:
    ```bash
@@ -63,6 +74,14 @@ Run `./server/main.go` to start the proxy server:
 - `reset blacklist`: Reset the blacklist database
 - `blockstate <true/false> <tld/global>`: Change the block state for TLDs or globally
 - `quit`: Exit the application
+
+## Contributing
+
+Follow the **quick start** section.
+
+### Submit a pull request
+
+If you'd like to contribute, please fork the repository and open a pull request to the `main` branch.
 
 ### Future plans
  add an easy way to populate blacklist with gambling, adult, malware ridden domains.
